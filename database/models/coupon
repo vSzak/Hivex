@@ -1,0 +1,13 @@
+const mongoose = require('mongoose')
+const schema = mongoose.Schema
+
+const couponSchema = schema({
+    expiry: Date,
+    totalCreated: Number,
+    couponCode: String,
+    value: Number
+})
+
+const coupon = mongoose.model("coupon", couponSchema)
+
+module.exports = coupon

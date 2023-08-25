@@ -6,7 +6,7 @@ class Venue {
     email_address:  string;
     password:       string;
 
-    constructor(id: number, venue_name: string, address: strring, email_address: string, password: string) {
+    constructor(id: number, venue_name: string, address: string, email_address: string, password: string) {
         this.id             = id;
         this.venue_name     = venue_name;
         this.address      = address;
@@ -15,4 +15,4 @@ class Venue {
     }
 }
 
-export = Venue;
+module.exports = Venue;
