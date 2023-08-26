@@ -105,8 +105,8 @@ function dashboard_page(req, res) {
     }
 
     if (req.session.isVenue) {
-        res.sendFile(utils.get_views_path("venue-dashbaord.html"))
+        res.sendFile(utils.get_views_path("venue-dashboard.html"))
     } else {
-        res.sendFile(utils.get_views_path("dashbaord.html"))
+        res.sendFile(utils.get_views_path("dashboard.html"))
     }
 }
