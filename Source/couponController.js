@@ -61,4 +61,4 @@ const verifyCoupon = async (body) => {
     }
 }
 
-module.exports = addCoupon, getAllCoupons, verifyCoupon
+module.exports = {addCoupon, getAllCoupons, verifyCoupon}
