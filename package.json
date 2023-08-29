@@ -2,8 +2,22 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "joi": "^17.10.0",
     "mongodb": "^5.8.1",
-    "mongoose": "^7.4.4"
-  }
+    "mongoos": "^0.0.1-security",
+    "mongoose": "^7.4.4",
+    "nodemailer": "^6.9.4"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "hivex",
+  "description": "SDS Spring 23 Hivex Back-end Project\r Tech Stack:\r - Node.js\r - SQL",
+  "version": "1.0.0",
+  "main": "routes.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
