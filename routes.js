@@ -25,7 +25,7 @@ function login_page(req: express.Request, res: express.Response) {
 /*function member_login_page(req: express.Request, res: express.Response) {
 
     if (req.session.user !== undefined) {
-        res.redirect("/dashboard")sdfkghsdkjghsdiljh
+        res.redirect("/dashboard")
     }
 
     res.set("Cache-Control", "no-store")
@@ -138,3 +138,4 @@ function PasswordReset {
         }
     }
 }
+
