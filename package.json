@@ -2,13 +2,20 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "joi": "^17.10.0",
     "mongodb": "^5.8.1",
     "mongoos": "^0.0.1-security",
+<<<<<<< HEAD
     "mongoose": "^6.10.0",
     "nodemailer": "^6.9.4"
+=======
+    "mongoose": "^7.5.0",
+    "nodemailer": "^6.9.4",
+    "path": "^0.12.7"
+>>>>>>> cbe42feb7a13993e1cf822f820e6303923b0f6b7
   },
   "scripts": {
     "start": "node server.js"
