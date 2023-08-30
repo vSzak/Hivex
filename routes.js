@@ -1,11 +1,12 @@
-import path = require('path')
-import express = require('express')
-import vcrypt = require('bcryptjs')
+const path = require('path')
+const express = require('express')
+const vcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
 
 //Local Imports
-import member = require('./Source/member')
-import broker = require('./Source/broker')
-import venue = require('./Source/venue')
+const member = require('./Source/member')
+const broker = require('./Source/broker')
+const venue = require('./Source/venue')
 
 function home_page(req: express.Request, res: express.Response) {
     res.sendFile(utils.get_views_path("index.html"))
@@ -24,7 +25,7 @@ function login_page(req: express.Request, res: express.Response) {
 /*function member_login_page(req: express.Request, res: express.Response) {
 
     if (req.session.user !== undefined) {
-        res.redirect("/dashboard")
+        res.redirect("/dashboard")sdfkghsdkjghsdiljh
     }
 
     res.set("Cache-Control", "no-store")
@@ -108,5 +109,32 @@ function dashboard_page(req, res) {
         res.sendFile(utils.get_views_path("venue-dashboard.html"))
     } else {
         res.sendFile(utils.get_views_path("dashboard.html"))
+    }
+}
+
+function PasswordReset {
+    const sendEmail = async (email, subject, text) => {
+        try {
+            const transporter = nodemailer.createTransport({
+                host: process.env.HOST,
+                service: proccess.env.SERVICE,
+                port: 587,
+                secure: true,
+                auth: {
+                    user: process.env.USER,
+                    pass: process.env.PASS,
+                },
+            })
+            await transporter.sendEmail({
+                from: process.env.USER,
+                to: email,
+                subject: subject,
+                text: text,
+            })
+
+            console.log("email sent successfully")
+        } catch (error) {
+            console.log(error, "email not sent")
+        }
     }
 }

@@ -1,25 +1,18 @@
-//Third Party Import
-import mongodb = require("mongodb");
+"use strict"
 
-//Local Imports
-import Member = require("./member");
-import Broker = require("./broker");
-import Venue = require("./venue");
-import Coupon = require("./coupon");
+const mongodb = require("mongodb")
 
+const db_client = new mongodb.MongoClient(process.env.mongodb)
+const hivex_db = db_client.db("hivex-db")
+const members_collection = hivex_db.collection("Members")
+const brokers_collection = hivex_db.collection("Brokers")
+const venues_collection = hivex_db.collection("Venues")
+const coupons_collection = hivex_db.collection("Coupons")
 
-const db_client         : mongodb.MongoClient           = new mongodb.MongoClient("mongodb+srv://HivexAdmin:<oJ7AXlV6jJ5IjMXm>@hivex.cs6oby3.mongodb.net/");
-
-const hivex_db          : mongodb.Db                    = db_client.db("HiveX-db");
-const member_collection : mongodb.Collection<Member>    = hivex_db.collection("Members");
-const broker_collection : mongodb.Collection<Broker>    = hivex_db.collection("Brokers");
-const venue_collection : mongodb.Collection<Venue>    = hivex_db.collection("Venues");
-const coupon_collection : mongodb.Collection<Coupon>    = hivex_db.collection("Coupons");
-
-export = {
+module.exports = {
     db_client,
-    member_collection,
-    broker_collection,
-    venue_collection,
-    coupon_collection
-};
+    members_collection,
+    brokers_collection,
+    venues_collection,
+    coupons_collection
+}
