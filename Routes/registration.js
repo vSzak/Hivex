@@ -12,12 +12,20 @@ function registerPage (req, res) {
     res.sendFile(utils.get_views_path("register.html"))
 }
 
+const passwordRegex = /^(?=.*[A-Za-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+
 function registerFormSubmit (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+
+        if(!passwordRegex.test(req.body.password)) {
+            return res.status(400).send('Password does not meet Complexity requirements.')
+        }
+
         try {
 
+            let isBroker = false
             let hash = yield bcryptjs.hash(req.body.password, 10)
-            let member = new Member(req.body.id, req.body.first_name, req.body.last_name, req.body.email, hash);
+            let member = new Member(req.body.id, req.body.first_name, req.body.last_name, req.body.email, hash, isBroker);
             var documentCount = yield db.member_collection.countDocuments({email: req.body.email}, {limit: 1})
 
             if (documentCount == 0) {

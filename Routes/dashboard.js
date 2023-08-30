@@ -3,6 +3,7 @@ const bcryptjs = require("bcryptjs")
 const db = require("../Source/db-client")
 const Member = require("../Source/member")
 const Venue = require("../Source/venue")
+const { listFilesAbsolute } = require("@nlpjs/basic")
 
 function dashboard_page(req, res) {
 
@@ -18,6 +19,20 @@ function dashboard_page(req, res) {
     }
 }
 
+function brokerDashboard () {
+    let isBroker = false
+
+    var x = document.getElementById("BrokerButton")
+    if (isBroker) {
+        x.style.display = "none"
+        isBroker = false
+    } else {
+        x.style.display = "block"
+        isBroker = true
+    }
+}
+
 module.exports = {
-    dashboard_page
+    dashboard_page,
+    brokerDashboard
 }

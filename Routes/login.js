@@ -28,13 +28,8 @@ function loginFormSubmit (req, res) {
                 return
             }
 
-            /*const Venue = await db.venues_collection.findOne<Venue>(
-                {"email address": req_email}
-                isVenue = true
-            )*/
-            // Setup Venue redirection 
-
             const valid = yield bcryptjs.compare(req_password, user.password)
+            const Venue = yield db.venues_collection.findOne<Venue>({"email address": req_email})
 
             if (valid) {
                 log.info(`Successful login attempt [USER: ${user.email_address}]`)
@@ -44,6 +39,17 @@ function loginFormSubmit (req, res) {
                     req.session.isVenue = isVenue
                     res.redirect("/dashboard")
                 })
+            } else if (Venue) {
+                isVenue = true
+
+                log.info(`Successful login attempt [VENUE: ${user.email_address}]`)
+                req.session.regenerate(function () {
+
+                    req.session.user = user
+                    req.session.isVenue = isVenue
+                    res.redirect("/venue-dashboard")
+                })
+                
             } else {
                 log.warning(`Failed login attempt with incorrect password [USER: ${user.email_address}]`)
                 res.redirect("/login")
