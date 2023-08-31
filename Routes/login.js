@@ -3,6 +3,7 @@ const bcryptjs = require("bcryptjs")
 const db = require("../Source/db-client")
 const Member = require("../Source/member")
 const Venue = require("../Source/venue")
+const path = require("path")
 
 function loginPage (req, res) {
     if (req.session.user !== undefined) {
