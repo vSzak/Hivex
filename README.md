@@ -6,7 +6,7 @@ Tech Stack:
 
 # .env files
 ```js
-MONGODB_URI = "mongodb+srv://HivexAdmin:yAdy4PEgalxTUSTr@hivex.cs6oby3.mongodb.net/"
+MONGODB_URI = "mongodb+srv://HivexAdmin:compasswtf@hivex.cs6oby3.mongodb.net/"
 HOST = // email HOST
 USER = // email id
 PASS = //email password

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const url = process.env.MONGODB_URI
+const url = 'mongodb+srv://HivexAdmin:compasswtf@hivex.cs6oby3.mongodb.net/'
 
 const open = (uri = url) => {
 

@@ -1,13 +1,14 @@
 const express = require('express')
 const app = express()
 require('dotenv').config()
+const {MongoClient} = require("mongodb")
 
 const port = 3000
 
 const mongooseDB = require('./database/config')
 
 // Local Imports
-//const db = require("./db-client")
+//const db = require("./Source/db-client")
 const home = require("./Routes/home")
 const dashboard = require("./Routes/dashboard")
 const loginForm = require("./Routes/loginForm")
@@ -39,6 +40,7 @@ app.get("/logout", loginForm.logout)
 //Register
 app.get("/register", registration.registerPage)
 app.post("/register", registration.registerFormSubmit)
+
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`)

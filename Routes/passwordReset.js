@@ -1,5 +1,5 @@
 // https://dev.to/cyberwolves/how-to-implement-password-reset-via-email-in-node-js-132m
-const {User} = require("../models/user")
+/*const {User} = require("../models/user")
 const Token = require("../models/token")
 const sendEmail = require("../utils/sendEmail")
 const crypto = require("crypto")
@@ -62,4 +62,4 @@ router.post("/:userId/:token", async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router;*/

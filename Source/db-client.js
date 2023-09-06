@@ -2,7 +2,7 @@
 
 const mongodb = require("mongodb")
 
-const db_client = new mongodb.MongoClient(process.env.mongodb)
+const db_client = new mongodb.MongoClient('mongodb+srv://HivexAdmin:compasswtf@hivex.cs6oby3.mongodb.net/')
 const hivex_db = db_client.db("hivex-db")
 const members_collection = hivex_db.collection("Members")
 const brokers_collection = hivex_db.collection("Brokers")
