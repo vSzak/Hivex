@@ -44,7 +44,7 @@ const verifyCoupon = async (body) => {
             } else {
                 return {
                     inRange: false,
-                    message: 'Need to add more items wirth ${Coupon.totalCreated - body.total} to the list for this coupon to be enabled.'
+                    message: 'Need to add more items with ${Coupon.totalCreated - body.total} to the list for this coupon to be enabled.'
                 }
             }
         } else {

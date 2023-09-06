@@ -13,6 +13,7 @@ function registerPage (req, res) {
     res.sendFile(utils.get_views_path("register.html"))
 }
 
+// Password minimum rules
 const passwordRegex = /^(?=.*[A-Za-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 
 function registerFormSubmit (req, res) {
