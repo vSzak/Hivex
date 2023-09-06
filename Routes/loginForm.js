@@ -64,7 +64,13 @@ function loginFormSubmit (req, res) {
     })
 }
 
+function logout (req, res) {
+    req.session.destroy(function () {})
+    res.redirect("/")
+}
+
 module.exports = {
     loginPage,
-    loginFormSubmit
+    loginFormSubmit,
+    logout
 }
