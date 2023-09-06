@@ -7,12 +7,12 @@ const port = 3000
 const mongooseDB = require('./database/config')
 
 // Local Imports
-const db = require("./db-client")
-const home = require("../Routes/home")
-const dashboard = require("../Routes/dashboard")
-const loginForm = require("../Routes/loginForm")
-const passwordReset = require("../Routes/passwordReset")
-const registration = require("../Routes/registration")
+//const db = require("./db-client")
+const home = require("./Routes/home")
+const dashboard = require("./Routes/dashboard")
+const loginForm = require("./Routes/loginForm")
+const passwordReset = require("./Routes/passwordReset")
+const registration = require("./Routes/registration")
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
