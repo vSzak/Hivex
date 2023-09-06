@@ -14,14 +14,12 @@ function registerPage (req, res) {
 }
 
 // Password minimum rules
-const passwordRegex = /^(?=.*[A-Za-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+//const passwordRegex = new RegExp("^(?=.*[A-Za-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", "i")
 
 function registerFormSubmit (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-
-        if(!passwordRegex.test(req.body.password)) {
-            return res.status(400).send('Password does not meet Complexity requirements.')
-        }
+    
+        req.check(req.body.password).matches("^(?=.*[A-Za-Z])(?=.*[#$@!%&*?])(?=.*\d)[A-Za-z#$@!%&*??=.*\\d]{8,}$", "i")
 
         try {
 
