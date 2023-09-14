@@ -10,7 +10,7 @@ function registerPage (req, res) {
         return
     }
 
-    res.sendFile(utils.get_views_path("register.html"))
+    res.sendFile(utils.get_views_path("register.js"))
 }
 
 // Password minimum rules

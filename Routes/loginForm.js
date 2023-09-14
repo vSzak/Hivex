@@ -12,7 +12,7 @@ function loginPage (req, res) {
     }
 
     res.set("Cache-Control", "no-store")
-    res.sendFile(utils.get_views_path("login.html"))
+    res.sendFile(utils.get_views_path("login.js"))
 }
 
 function loginFormSubmit (req, res) {
