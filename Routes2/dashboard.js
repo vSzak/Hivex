@@ -3,7 +3,6 @@ const bcryptjs = require("bcryptjs")
 const db = require("../Source/db-client")
 const Member = require("../Source/member")
 const Venue = require("../Source/venue")
-const { listFilesAbsolute } = require("@nlpjs/basic")
 const path = require("path")
 
 function dashboard_page(req, res) {
