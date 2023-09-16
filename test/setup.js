@@ -3,26 +3,6 @@ const mongoose = require("mongoose");
 const { app } = require("../server");
 const request = require("supertest");
 
-// global.signin = async () => {
-//     const email = "test@test.com";
-//     const password = "password";
-
-//     // Sign up new user
-//     const response = await request(app)
-//         .post("/api/users")
-//         .send({
-//             name: "test",
-//             email,
-//             phone: "123",
-//             password,
-//         })
-//         .expect(201);
-
-//     const cookie = response.get("Set-Cookie");
-
-//     return cookie;
-// };
-
 let mongo;
 
 beforeAll(async () => {
@@ -48,3 +28,23 @@ afterAll(async () => {
     }
     await mongoose.connection.close();
 });
+
+global.signin = async () => {
+    const email = "test@test.com";
+    const password = "password";
+
+    // Sign up new user
+    const response = await request(app)
+        .post("/api/members/signup")
+        .send({
+            firstName: "test",
+            lasttName: "test",
+            email: "test@test.com",
+            password: "password",
+        })
+        .expect(201);
+
+    const cookie = response.get("Set-Cookie");
+
+    return cookie;
+};

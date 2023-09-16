@@ -4,13 +4,15 @@ const { body } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 const asyncHandler = require("../middleware/asyncHandler");
+const { currentMember } = require("../middleware/current-member");
 const Member = require("../models/memberModel");
 
 const router = express.Router();
 
 // Sign up
 // POST /api/members/signup
-router.route("/members/signup").post(
+router.post(
+    "/members/signup",
     [
         body("email").isEmail().withMessage("Email must be valid"),
         body("password")
@@ -53,7 +55,8 @@ router.route("/members/signup").post(
 
 // Sign up (broker)
 // POST /api/brokers/signup
-router.route("/brokers/signup").post(
+router.post(
+    "/brokers/signup",
     [
         body("email").isEmail().withMessage("Email must be valid"),
         body("password")
@@ -94,5 +97,63 @@ router.route("/brokers/signup").post(
         res.status(201).send(member);
     })
 );
+
+// Sign in
+// POST /api/members/signin
+router.post(
+    "/members/signin",
+    [
+        body("email").isEmail().withMessage("Email must be valid"),
+        body("password")
+            .trim()
+            .notEmpty()
+            .withMessage("You must supply a password"),
+    ],
+    validateRequest,
+    asyncHandler(async (req, res) => {
+        const { email, password } = req.body;
+
+        const existingMember = await Member.findOne({ email });
+        if (!existingMember) {
+            throw new BadRequestError("Invalid credentials");
+        }
+
+        const passwordsMatch = await existingMember.matchPassword(password);
+
+        if (!passwordsMatch) {
+            throw new BadRequestError("Invalid credentials");
+        }
+
+        // Generate JWT
+        const userJwt = jwt.sign(
+            {
+                id: existingMember.id,
+                email: existingMember.email,
+            },
+            process.env.JWT_KEY
+        );
+
+        // Store it on session object
+        req.session = {
+            jwt: userJwt,
+        };
+
+        res.status(200).send(existingMember);
+    })
+);
+
+// Sign out
+// POST /api/members/signout
+router.post("/members/signout", (req, res) => {
+    req.session = null;
+
+    res.send({});
+});
+
+// Current user
+// GET /api/members/profile
+router.get("/members/profile", currentMember, (req, res) => {
+    res.send({ currentMember: req.currentMember || null });
+});
 
 module.exports = router;

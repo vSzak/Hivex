@@ -95,13 +95,95 @@ describe("Sign up", () => {
 });
 
 describe("Sign in", () => {
-    it("returns 201 on successful signup", async () => {
-        return request(app)
+    it("fails when email that does not exist", async () => {
+        await request(app)
+            .post("/api/members/signin")
+            .send({
+                email: "test@test.com",
+                password: "password",
+            })
+            .expect(400);
+    });
+
+    it("fails when incorrect password", async () => {
+        await request(app)
             .post("/api/members/signup")
             .send({
                 email: "test@test.com",
                 password: "password",
             })
             .expect(201);
+
+        await request(app)
+            .post("/api/members/signin")
+            .send({
+                email: "test@test.com",
+                password: "aslkdfjalskdfj",
+            })
+            .expect(400);
     });
+
+    it("responds with cookie when valid credentials", async () => {
+        await request(app)
+            .post("/api/members/signup")
+            .send({
+                email: "test@test.com",
+                password: "password",
+            })
+            .expect(201);
+
+        const response = await request(app)
+            .post("/api/members/signin")
+            .send({
+                email: "test@test.com",
+                password: "password",
+            })
+            .expect(200);
+
+        expect(response.get("Set-Cookie")).toBeDefined();
+    });
+});
+
+describe("Sign out", () => {
+    it("clears cookie after sign out", async () => {
+        await request(app)
+            .post("/api/members/signup")
+            .send({
+                email: "test@test.com",
+                password: "password",
+            })
+            .expect(201);
+
+        const response = await request(app)
+            .post("/api/members/signout")
+            .send({})
+            .expect(200);
+
+        expect(response.get("Set-Cookie")[0]).toEqual(
+            "session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly"
+        );
+    });
+});
+
+describe("Current member", () => {
+    it('responds with details about current user', async () => {
+        const cookie = await global.signin();
+      
+        const response = await request(app)
+          .get('/api/members/profile')
+          .set('Cookie', cookie)
+          .send()
+          .expect(200);
+      
+        expect(response.body.currentMember.email).toEqual('test@test.com');
+      });
+      
+      it('responds with null if not authenticated', async () => {
+        const response = await request(app)
+          .get('/api/members/profile')
+          .send()
+          .expect(200);
+      
+        expect(response.body.currentMember).toEqual(null);
+      });
 });

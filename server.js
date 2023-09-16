@@ -3,7 +3,9 @@ const express = require("express");
 const { json } = require("body-parser");
 const cookieSession = require("cookie-session");
 
-const userRoutes = require("./routes/userRoutes");
+const memberRoutes = require("./routes/memberRoutes");
+const venueRoutes = require("./routes/venueRoutes");
+const couponRoutes = require("./routes/couponRoutes");
 const asyncHandler = require("./middleware/asyncHandler");
 
 const app = express();
@@ -21,7 +23,9 @@ app.get("/api", (req, res) => {
     res.send({ message: "v1" });
 });
 
-app.use("/api", userRoutes);
+app.use("/api", memberRoutes);
+app.use("/api/venues", venueRoutes);
+app.use("/api/coupons", couponRoutes);
 
 app.all("*", asyncHandler(async (req, res) => {
     throw new NotFoundError();
