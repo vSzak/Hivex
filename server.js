@@ -23,6 +23,10 @@ app.get("/api", (req, res) => {
     res.send({ message: "v2" });
 });
 
+app.get("/", (req, res) => {
+    res.send({ message: "Hivex" });
+});
+
 app.use("/api", memberRoutes);
 app.use("/api/venues", venueRoutes);
 app.use("/api/coupons", couponRoutes);
