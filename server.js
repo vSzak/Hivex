@@ -20,7 +20,7 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/api", (req, res) => {
-    res.send({ message: "v2" });
+    res.send({ message: "v3" });
 });
 
 app.get("/", (req, res) => {
