@@ -1,4 +1,4 @@
-const { errorHandler } = require("@dqticket/common");
+const { errorHandler, NotFoundError } = require("@dqticket/common");
 const express = require("express");
 const { json } = require("body-parser");
 const cookieSession = require("cookie-session");
