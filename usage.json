@@ -1,0 +1,101 @@
+{
+  "endpoints": [
+    {
+      "name": "Sign up (member)",
+      "access": "Public",
+      "method": "POST",
+      "path": "/api/members/signup",
+      "body": {
+        "firstName": "string",
+        "lastName": "string",
+        "email": "string",
+        "password": "string"
+      }
+    },
+    {
+      "name": "Sign up (broker)",
+      "access": "Public",
+      "method": "POST",
+      "path": "/api/brokers/signup",
+      "body": {
+        "firstName": "string",
+        "lastName": "string",
+        "email": "string",
+        "password": "string"
+      }
+    },
+    {
+      "name": "Sign up (Venue)",
+      "access": "Public",
+      "method": "POST",
+      "path": "/api/venues/signup",
+      "body": {
+        "name": "string",
+        "email": "string",
+        "password": "string"
+      }
+    },
+    {
+      "name": "Sign in (member & broker)",
+      "access": "Public",
+      "method": "POST",
+      "path": "/api/members/signin",
+      "body": {
+        "email": "string",
+        "password": "string"
+      }
+    },
+    {
+      "name": "Sign in (Venue)",
+      "access": "Public",
+      "method": "POST",
+      "path": "/api/venues/signin",
+      "body": {
+        "email": "string",
+        "password": "string"
+      }
+    },
+    {
+      "name": "Get current member",
+      "access": "Member",
+      "method": "GET",
+      "path": "/api/members/profile"
+    },
+    {
+      "name": "Sign out (member & broker)",
+      "access": "Public",
+      "method": "POST",
+      "path": "/api/members/signout"
+    },
+    {
+      "name": "Sign out (venues)",
+      "access": "Public",
+      "method": "POST",
+      "path": "/api/venues/signout"
+    },
+    {
+      "name": "Create coupon",
+      "access": "Venue",
+      "method": "POST",
+      "path": "/api/coupons",
+      "body": {
+        "title": "string",
+        "code": "string",
+        "value": "number"
+      }
+    },
+    {
+      "name": "Get all coupons created by a venue",
+      "access": "Venue",
+      "method": "GET",
+      "path": "/api/coupons"
+    },
+    {
+      "name": "Get single coupon",
+      "access": "Public",
+      "method": "GET",
+      "path": "/api/coupons/:id",
+      "example": "https://hivex.vercel.app/api/coupons/650530839a2c8d2a2aac75f8"
+    }
+  ]
+}

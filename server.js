@@ -7,6 +7,7 @@ const memberRoutes = require("./routes/memberRoutes");
 const venueRoutes = require("./routes/venueRoutes");
 const couponRoutes = require("./routes/couponRoutes");
 const asyncHandler = require("./middleware/asyncHandler");
+const apiEndpoints = require('./usage.json');
 
 const app = express();
 app.set("trust proxy", true);
@@ -24,7 +25,7 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.send({ message: "Hivex" });
+    res.send(apiEndpoints);
 });
 
 app.use("/api", memberRoutes);
