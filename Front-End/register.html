@@ -1,4 +1,4 @@
-<html>
+<!--<html>
     <head>
 
     </head>
@@ -14,7 +14,7 @@
             </div>
         </form>
         
-        <!--<div className="form-body">
+        <div className="form-body">
             <div className="firstName">
                 <label className="form_label" for="firstName">First Name</label>
                 <input className="form_input" type="text" id="firstName" placeholder="First Name"/>            
@@ -40,6 +40,36 @@
             <button type="submit" class="btn">Register</button>
             <a class="login" href="./login.html">Already Registered? Login</a>
             </div>
-        </div> -->
+        </div>>
     </body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form action="/register" method="POST"> 
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="/login">Login</a></p> <!-- Link to your login page -->
+    </div>
+</body>
 </html>
