@@ -1,60 +1,41 @@
-const express = require('express')
-const app = express()
-require('dotenv').config()
-const {MongoClient} = require("mongodb")
+const { errorHandler, NotFoundError } = require("@dqticket/common");
+const express = require("express");
+const { json } = require("body-parser");
+const cookieSession = require("cookie-session");
 
-const port = 3000
+const memberRoutes = require("./routes/memberRoutes");
+const venueRoutes = require("./routes/venueRoutes");
+const couponRoutes = require("./routes/couponRoutes");
+const asyncHandler = require("./middleware/asyncHandler");
+const apiEndpoints = require('./usage.json');
 
-const mongooseDB = require('./database/config')
-
-// Local Imports
-//const db = require("./Source/db-client")
-const home = require("./Routes/home")
-const dashboard = require("./Routes/dashboard")
-const loginForm = require("./Routes/loginForm")
-const passwordReset = require("./Routes/passwordReset")
-const registration = require("./Routes/registration")
-
-app.use(express.json())
-app.use(express.urlencoded({extended:false}))
-
-// Enable stativ file serving
-app.use("/stylesheets", express.static("public/stylesheets"))
-app.use("/scripts", express.static("public/scripts"))
-app.use("/icons", express.static("public/icons"))
-app.use("/assets", express.static("public/assets"))
-
-//ROUTES
-// Home Page
-app.get("/", home.homePage)
-// Login Page
-app.get("/login", loginForm.loginPage)
-app.post("/login", loginForm.loginFormSubmit)
-
-// Dashboard Pages and Similar
-app.get("/dashbaord", dashboard.dashboard_page)
-
-// Logout
-app.get("/logout", loginForm.logout)
-
-//Register
-app.get("/register", registration.registerPage)
-app.post("/register", registration.registerFormSubmit)
-
-
-app.listen(port, () => {
-    console.log(`listening on port ${port}`)
-})
-
-mongooseDB.open()
-
-function shutdown () {
-    console.log("\nSIGTERM received, shutting down...")
-    mongooseDB.close()
-    server.close(() => {
-        console.log("=== Server closed ===")
+const app = express();
+app.set("trust proxy", true);
+app.use(json());
+app.use(
+    cookieSession({
+        signed: false,
+        secure: process.env.NODE_ENV === "production",
     })
-}
+);
+app.use(express.urlencoded({ extended: false }));
 
-process.on("SIGTERM", shutdown)
-process.on("SIGINT", shutdown)
+app.get("/api", (req, res) => {
+    res.send({ message: "v3" });
+});
+
+app.get("/", (req, res) => {
+    res.send(apiEndpoints);
+});
+
+app.use("/api", memberRoutes);
+app.use("/api/venues", venueRoutes);
+app.use("/api/coupons", couponRoutes);
+
+app.all("*", asyncHandler(async (req, res) => {
+    throw new NotFoundError();
+}));
+
+app.use(errorHandler);
+
+module.exports = { app };
