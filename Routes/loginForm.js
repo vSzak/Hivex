@@ -74,76 +74,87 @@ module.exports = {
     loginFormSubmit,
     logout
 }*/
-
-"use strict";
-const bcryptjs = require("bcryptjs");
-const db = require("../Source/db-client");
-const Member = require("../Source/member");
-const Venue = require("../Source/venue");
-const path = require("path");
-
-const { createConsoleLogger } = require("@nlpjs/logger");
-
-const log = createConsoleLogger();
-
-function loginPage(req, res) {
-  if (req.session.user !== undefined) {
-    return res.redirect("/dashboard");
-  }
-
-  res.set("Cache-Control", "no-store");
-  res.sendFile(path.join(__dirname, "../views/login.html"));
-}
-
-async function loginFormSubmit(req, res) {
-  try {
-    const req_email = req.body.email_address;
-    const req_password = req.body.password;
-    let isVenue = false;
-
-    const user = await db.members_collection.findOne({ "email address": req_email });
-
-    if (user === null) {
-      return res.redirect("/login");
-    }
-
-    const valid = await bcryptjs.compare(req_password, user.password);
-    const venue = await db.venues_collection.findOne({ "email address": req_email });
-
-    if (valid) {
-      log.info(`Successful login attempt [USER: ${user.email_address}]`);
-      req.session.regenerate(function () {
-        req.session.user = user;
-        req.session.isVenue = isVenue;
-        return res.redirect("/dashboard");
-      });
-    } else if (venue) {
-      isVenue = true;
-      log.info(`Successful login attempt [VENUE: ${venue.email_address}]`);
-      req.session.regenerate(function () {
-        req.session.user = user;
-        req.session.isVenue = isVenue;
-        return res.redirect("/venue-dashboard");
-      });
-    } else {
-      log.warning(`Failed login attempt with incorrect password [USER: ${user.email_address}]`);
-      return res.redirect("/login");
-    }
-  } catch (err) {
-    log.error(`Failed login due to internal error: ${err}`);
-    if (!res.writableEnded) {
-      return res.sendStatus(500);
-    }
-  }
-}
-
-function logout(req, res) {
-  req.session.destroy(function () {});
-  res.redirect("/");
-}
-
 module.exports = {
-  loginPage,
-  loginFormSubmit,
-  logout,
+    loginPage,
+    logout
 };
+
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
+const { body, validationResult } = require("express-validator");
+const { join } = require("path");
+const { Member } = require("../Source/member");
+const utils = require("./utils");
+
+router.get("/", loginPage);
+router.post("/", loginValidation, loginUser);
+
+function loginPage (req, res) {
+    if (req.session && req.session.user !== undefined) {
+        res.redirect("/dashboard");
+        return;
+    }
+
+    res.set("Cache-Control", "no-store");
+    res.sendFile(utils.get_views_path("login.js"));
+}
+
+function loginValidation (req, res, next) {
+    const validation = [
+        body("email").isEmail().withMessage("Invalid email address"),
+        body("password").notEmpty().withMessage("Password is required")
+    ];
+
+    Promise.all(validation.map((validation) => validation.run(req)))
+        .then(() => next())
+        .catch((errors) => {
+            const errorMessages = errors.map((error) => error.msg);
+            res.status(400).json({ errors: errorMessages });
+        });
+}
+
+function loginUser (req, res) {
+    const { email, password } = req.body;
+
+    User.findOne({ email: email }, (err, user) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Internal server error");
+            return;
+        }
+
+        if (!user) {
+            res.status(400).json({ errors: ["Invalid email or password"] });
+            return;
+        }
+
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Internal server error");
+                return;
+            }
+
+            if (!result) {
+                res.status(400).json({ errors: ["Invalid email or password"] });
+                return;
+            }
+
+            req.session.user = user._id;
+            res.redirect("/dashboard");
+        });
+    });
+}
+
+function logout (req, res) {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Internal server error");
+            return;
+        }
+
+        res.redirect("/");
+    });
+}
