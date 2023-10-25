@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const asyncHandler = require("../middleware/asyncHandler");
 const { currentMember } = require("../middleware/current-member");
 const Member = require("../models/memberModel");
+const crypto = require('crypto');
 
 const router = express.Router();
 
@@ -141,6 +142,74 @@ router.post(
         res.status(200).send(existingMember);
     })
 );
+
+//Forgot Password
+//POST /api/members/reset
+router.post("/members/reset", async (req, res) => {
+    const {email} = req.body
+    try {
+        const user = await Member.findOne({ email })
+        if (!user) {
+            return res.status(404).json({ message: 'User no found'})
+        }
+
+        const resetToken = crypto.randomBytes(20).toString('hex')
+        const tokenExpiration = new Date(Date.now() + 3600000)
+        user.resetToken = resetToken
+        user.tokenExpiration = tokenExpiration
+        await user.save()
+
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ message: 'Internal Server Error'})
+    }
+})
+
+//Confirm password reset (via the link)
+//GET /api/members/reset/:token
+router.get('/members/reset/:token', async (req, res) => {
+    const token = req.params.token
+    try {
+        const user = await Member.findOne({
+            resetToken: token,
+            tokenExpiration: { $gt: new Date()}
+        })
+
+        if (!user) {
+            return res.status(404).json({ message: 'Invalid or expired token'})
+        }
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ message: 'Internal Server Error'})
+    }
+})
+
+//Handle password update after confirmation
+//POST /api/members/reset/confirm
+router.post('/members/reset/confirm', async (req, res) =>{
+    const {token, newPassword} = req.body
+    try {
+        const user = await Member.findOne({
+            resetToken: token,
+            tokenExpiration: {$gt: new Date()},
+        })
+
+        if (!user) {
+            return res.status(404).json({message: 'Invalid or expired token'})
+        }
+
+        user.password = newPassword
+
+        user.resetToken = undefined
+        user.tokenExpiration = undefined
+
+        await user.save()
+        res.json({message: 'Password reset successfully'})
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({message: 'Internal Server Error'})
+    }
+})
 
 // Sign out
 // POST /api/members/signout

@@ -2,6 +2,7 @@ const { validateRequest, BadRequestError } = require("@dqticket/common");
 const express = require("express");
 const { body } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const axios = require('axios');
 
 const asyncHandler = require("../middleware/asyncHandler");
 const { currentVenue } = require("../middleware/current-venue");
@@ -112,3 +113,26 @@ router.get("/profile", currentVenue, (req, res) => {
 });
 
 module.exports = router;
+
+/*<script src=
+“https://maps.googleapis.com/maps/api/js?key=AIzaSyDbmf_oibOuPXvtR11eQJiFcvY148s_Aow&callback=initMap&libraries=&v=weekly”
+async>
+</script>*/
+router.get("/location", currentVenue, (req, res) => {
+    const apiKey = AIzaSyDbmf_oibOuPXvtR11eQJiFcvY148s_Aow
+
+    const address = currentVenue.address
+
+    if (!address) {
+        return res.status(400).json({ error: 'Address parameter is missing'})
+    }
+
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
+
+    axios.get(url)
+        .then(response => {
+            const location = response.data.results[0].geometry.location
+            res.json(location)
+        })
+
+})

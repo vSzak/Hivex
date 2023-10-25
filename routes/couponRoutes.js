@@ -4,6 +4,8 @@ const express = require("express");
 const asyncHandler = require("../middleware/asyncHandler");
 const { currentVenue } = require("../middleware/current-venue");
 const Coupon = require("../models/couponModel");
+const Deal = require("../models/dealModel")
+const voucher = require("voucher-code-generator")
 
 const router = express.Router();
 
@@ -14,6 +16,11 @@ router.post(
     currentVenue,
     asyncHandler(async (req, res) => {
         const { title, code, value, expiry } = req.body;
+        const couponCode = voucher.generate({
+            length: 4,
+            charset: 'alphanumeric',
+            count: Deal.totalCreated,
+        })
 
         const coupon = await Coupon.create({
             title,
@@ -42,23 +49,25 @@ router.get(
     })
 );
 
-// get single coupon
-// GET /api/coupons/:id
+//get single coupon
+//GET /api/coupons/:code
 router.get(
-    "/:id",
+    "/:code",
     currentVenue,
     asyncHandler(async (req, res) => {
-        if (req.params.id.length !== 24) {
-            throw new BadRequestError("Id must be 24 characters");
-        }
-        const coupon = await Coupon.findById(req.params.id);
+        const code = req.params.code
+        const coupon = await Coupon.findOne({code})
 
         if (!coupon) {
-            throw new NotFoundError();
+            throw new NotFoundError()
         }
-
-        res.send(coupon);
+        if (coupon.expiry < new Date()/1000){
+            throw new BadRequestError("Coupon Expired")
+        }
+        else {
+            res.send(coupon)
+        }
     })
-);
+)
 
 module.exports = router;

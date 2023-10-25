@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 
-const couponSchema = mongoose.Schema(
+const dealSchema = mongoose.Schema(
     {
         title: {
           type: String,
-        },
-        code: {
-          type: String,
           unique: true,
+        },
+        totalCreated: {
+            type: Number,
+            default: 1,
         },
         value: {
           type: String,
@@ -17,20 +18,16 @@ const couponSchema = mongoose.Schema(
           required: true,
           default: Date.now() + 7*24*60*60*1000, // 1 week
         },
-        memberId: {
+        description: {
           type: String,
         },
         venueId: {
           type: String,
           required: true
         },
-        points: {
-          type: Number,
-          default: 10
-        },
-        redeemed: {
+        isActive: {
           type: Boolean,
-          default: true
+          default: false,
         }
     },
     {
@@ -44,6 +41,6 @@ const couponSchema = mongoose.Schema(
     }
 );
 
-const Coupon = mongoose.model("Coupon", couponSchema);
+const Deal = mongoose.model("Deal", dealSchema);
 
-module.exports = Coupon;
+module.exports = Deal;

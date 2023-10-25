@@ -6,6 +6,7 @@ const cookieSession = require("cookie-session");
 const memberRoutes = require("./routes/memberRoutes");
 const venueRoutes = require("./routes/venueRoutes");
 const couponRoutes = require("./routes/couponRoutes");
+const dealRoutes = require("./routes/dealRoutes");
 const asyncHandler = require("./middleware/asyncHandler");
 const apiEndpoints = require('./usage.json');
 
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 app.use("/api", memberRoutes);
 app.use("/api/venues", venueRoutes);
 app.use("/api/coupons", couponRoutes);
+app.use("/api/deals", dealRoutes)
 
 app.all("*", asyncHandler(async (req, res) => {
     throw new NotFoundError();
