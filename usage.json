@@ -85,6 +85,19 @@
       }
     },
     {
+      "name": "Get all venues",
+      "access": "Public",
+      "method": "GET",
+      "path": "/api/venues"
+    },
+    {
+      "name": "Get single venue",
+      "access": "Public",
+      "method": "GET",
+      "path": "/api/venues/:id",
+      "example": "http://localhost:3000/api/venues/653c8d76d3a8f936bcf81987"
+    },
+    {
       "name": "Get all coupons created by a venue",
       "access": "Venue",
       "method": "GET",

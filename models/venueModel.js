@@ -3,24 +3,29 @@ const bcrypt = require("bcryptjs");
 
 const venueSchema = mongoose.Schema(
     {
-        name: {
+        venue_id: {
+            type: Number,
+            require: true,
+            unique: true,
+        }, 
+        venue_name: {
             type: String,
             require: true,
         },
-        address: {
+        venue_address: {
             type: String,
         },
-        email: {
+        venue_email: {
             type: String,
             require: true,
             unique: true,
         },
-        password: {
+        /*password: {
             type: String,
             required: true,
-        },
+        },*/
     },
-    {
+    /*{
         timestamps: true,
         toJSON: {
             transform(doc, ret) {
@@ -29,9 +34,10 @@ const venueSchema = mongoose.Schema(
                 delete ret.password;
             },
         },
-    }
+    }*/
 );
 
+/*
 // Match user entered password to hashed password in database
 venueSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
@@ -46,6 +52,7 @@ venueSchema.pre("save", async function (next) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
 });
+*/
 
 const Venue = mongoose.model("Venue", venueSchema);
 
